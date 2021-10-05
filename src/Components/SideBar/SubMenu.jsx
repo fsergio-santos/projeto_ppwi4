@@ -4,7 +4,7 @@ import { SideBarLink, DropdownLink, SideBarLabel } from './Styles';
 
 
 const SubMenu = ( {  page, path, icon, opened, closed, subMenu, sub  }) => {
-   const [submenu, setSubMenu] = useState(false);
+   const [submenu, setSubMenu] = useState(false); 
 
    return (
       
