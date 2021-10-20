@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import Pagination from '../../Components/Table/Pagination';
 import {Link} from "react-router-dom";
 import { GradeSistema } from '../../Components/Content/Style';
 import PageHeaders from '../../Components/Header/PageHeaders';
 import { findAllAutor } from '../../Service/AutorService';
 
-
-
+const tamanhoDaPagina = [5,10,15,20];
 
 const Listar = () => {
     
@@ -13,17 +13,23 @@ const Listar = () => {
 
     const [tamanhoPagina, setTamanhoPagina] = useState(5);
 
-    const [paginaAtual, setPaginaAtual] = useState(0);
+    const [paginaAtual, setPaginaAtual] = useState(1);
 
     const [totalPagina, setTotalPagina] = useState(0)
 
     useEffect( () => {
       async function loadDataAutores() {
-        const dados = await findAllAutor( tamanhoPagina, paginaAtual );
-        setDadosAutores(dados);
+        const dados = await findAllAutor( paginaAtual,tamanhoPagina );
+        //console.log(dados.pageable.pageSize);
+        //console.log(dados.pageable.pageNumber);
+        //console.log(dados.totalPages);
+        setPaginaAtual(dados.pageable.pageNumber);
+        setTotalPagina(dados.totalPages);
+        setDadosAutores(dados.content);
       }
       loadDataAutores();
    },[tamanhoPagina,paginaAtual])
+
 
     return(
       <Fragment>  
@@ -36,8 +42,6 @@ const Listar = () => {
                   icon="list"
                   toReturn="tachometer"
               />
-              
-              
               <GradeSistema>
               <div className="row">
                   <div className="row">
@@ -45,11 +49,16 @@ const Listar = () => {
                           <div className="form-group row">
                              <label className="col-form-label col-12 col-md-4 col-sm-1">Tamanho Página:</label>
                              <div className="col-8 col-sm-6 col-md-2 offset-md-1"> 
-                                <select className="form-control">
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>15</option>
-                                    <option>20</option>
+                                <select className="form-control" 
+                                        onChange={(e)=>setTamanhoPagina(e.target.value)}
+                                        value={tamanhoPagina}>
+                                    {
+                                      tamanhoDaPagina.map((size)=>(
+                                        <option key={size} value={size}>
+                                          {size}
+                                        </option>  
+                                      ))
+                                    }
                                 </select>
                              </div> 
                          </div>
@@ -108,6 +117,8 @@ const Listar = () => {
 
                    
                </div>
+               <Pagination paginaAtual={paginaAtual}
+                           totalPages={totalPagina}/>
                <Link to="/autor/incluir" 
                      className="btn btn-success btn-sm"
                      title="Incluir novo registro para autores"

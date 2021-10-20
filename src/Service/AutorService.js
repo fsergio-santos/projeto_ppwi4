@@ -1,14 +1,14 @@
 
 import banco from "../Config/Banco";
 
-export const findAllAutor = async ( tamanhoPagina, paginaAtual ) => {
+export const findAllAutor = async ( paginaAtual, tamanhoPagina ) => {
     return (
         banco({
             method:'GET',
             url:'/autor/listar',
             params:{
-              tamanhoPagina,
               paginaAtual,
+              tamanhoPagina,
             },
         }).then( (resposta) => {
             return resposta.data
