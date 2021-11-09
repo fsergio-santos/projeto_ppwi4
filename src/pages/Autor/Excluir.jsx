@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import { GradeSistema, Rodape } from '../../Components/Content/Style'
 import PageHeaders from '../../Components/Header/PageHeaders'
 import { INIT_AUTOR } from './Autor';
-import { findAutorById, updateAutor } from "../../Service/AutorService";
+import { findAutorById, deleteAutorById } from "../../Service/AutorService";
 
-const Alterar = (props) => {
-  
+const Excluir = (props) => {
+
   const { id } = props.match.params;
   const [autor, setAutor] = useState(INIT_AUTOR);
 
@@ -19,19 +19,13 @@ const Alterar = (props) => {
     loadData(); 
   },[id])
 
-  const onChangeAutor = ( e ) => {
-      const { name, value } = e.target;
-      setAutor({ ...autor, [name]:value})
-  }
-
   const onAutorSubmit= (e) =>{
     e.preventDefault();
-    updateAutor(autor);
+    deleteAutorById(autor.id);
     setAutor(INIT_AUTOR)
   }
-  
 
-    return (
+  return (
         <Fragment>  
         <div className="container">
          <div className="col-md-offset 4">   
@@ -45,14 +39,13 @@ const Alterar = (props) => {
           <GradeSistema>
           <div className="row col-8 mx-auto">
                <form onSubmit={(e) => onAutorSubmit(e)}>
-                 <div className="row">
+               <div className="row">
                      <div className="col-xs-12 col-sm-12 col-md-8">
                        <div className="form-group">
                          <label className="form-label">Nome:</label>
                          <input type="text"
                                 name="nome"
                                 value={autor.nome}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -62,7 +55,6 @@ const Alterar = (props) => {
                          <input type="date"
                                 name="dataNascimento"
                                 value={autor.dataNascimento}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -74,7 +66,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="rg"   
                                 value={autor.rg}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -84,7 +75,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="cpf"
                                 value={autor.cpf}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -94,7 +84,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="sexo"
                                 value={autor.sexo}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -106,7 +95,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="endereco"
                                 value={autor.endereco}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -116,7 +104,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="bairro"
                                 value={autor.bairro}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -128,7 +115,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="cidade"
                                 value={autor.cidade}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -138,7 +124,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="cep"
                                 value={autor.cep}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -150,7 +135,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="email"
                                 value={autor.email}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -162,7 +146,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="telefoneFixo"
                                 value={autor.telefoneFixo}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -172,7 +155,6 @@ const Alterar = (props) => {
                          <input type="text"
                                 name="telefoneMovel"
                                 value={autor.telefoneMovel}
-                                onChange={(e) => onChangeAutor(e)}
                                 className="form-control"/>                       
                        </div>  
                      </div>
@@ -180,13 +162,13 @@ const Alterar = (props) => {
                  <input type='hidden' id='id' name='id' value={autor.id}/>
                  <Rodape>
                    <button type="submit"
-                           className="btn btn-success  btn-lg"
+                           className="btn btn-danger  btn-lg"
                            title="Salvar Registro!" >
                       Salvar
                    </button>
                    <Link to="/autor/listar"
                          className="btn btn-secondary btn-lg ml-4" 
-                         title="Cancelar a alteração do registro">
+                         title="Cancelar a inclusão do registro">
                       Cancelar     
                    </Link>   
                  </Rodape>
@@ -199,6 +181,6 @@ const Alterar = (props) => {
     )
 }
 
-export default Alterar
+export default Excluir
 
 

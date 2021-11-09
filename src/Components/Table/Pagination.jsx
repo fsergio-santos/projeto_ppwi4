@@ -1,14 +1,20 @@
 import React, {useState} from "react";
 
-const Pagination = ({paginaAtual, totalPages }) => {
+const Pagination = ({paginaAtual, totalPages, changePage }) => {
 
-    const [currentPage, setcurrentPage] = useState(paginaAtual <= totalPages ? paginaAtual+1:1 )
-    
+    const [currentPage, setCurrentPage] = useState(paginaAtual <= totalPages ? paginaAtual+1:1 )
+
     const pages=[];
 
     let ellipsisLeft = false;
     let ellipsisRight = false; 
-
+     
+    const onChangePage = (pagina, e) =>{
+        e.preventDefault();
+        console.log(pagina);
+        setCurrentPage(pagina);
+        changePage(pagina); 
+    }
     
     for (let i = 1; i <=totalPages; i++){
         if (i===currentPage){
@@ -46,12 +52,14 @@ const Pagination = ({paginaAtual, totalPages }) => {
             <div className="col-xs-12 col-md-8">
                 <ul className="pagination pull-right">
                     <li className={paginaAtual === 0 ? "page-item disabled":"page-item"}>
-                       <button className="page-link btn btn-sm">
+                       <button className="page-link btn btn-sm"
+                           onClick={(e)=>onChangePage((1),e)}>
                            <i className="fa fa-angle-left"></i>
                        </button> 
                     </li>
                     <li className={paginaAtual === 0 ? "page-item disabled":"page-item"}>
-                       <button className="page-link btn btn-sm">
+                       <button className="page-link btn btn-sm"
+                            onClick={(e)=>onChangePage((currentPage === 0 ? currentPage: currentPage - 1 ),e)}>
                            <i className="fa fa-angle-double-left"></i>
                        </button>
                     </li>
@@ -61,13 +69,15 @@ const Pagination = ({paginaAtual, totalPages }) => {
                                 return <li key={page.id}
                                     className={paginaAtual+1 === page.id ? "page-item active":"page-item"}
                                 >
-                                <a href="/#" className="page-link" >
+                                <a href="/#" className="page-link" 
+                                   onClick={(e)=>onChangePage((page.id),e)}>
                                    {page.id}
                                 </a>
                                 </li>
                             } else {
                                 return <li key={page.id}>
-                                       <span className="pagination-ellipsis">
+                                       <span className="ellipsis">
+                                            &hellip;
                                        </span>
                                     </li>
                             }
@@ -76,14 +86,17 @@ const Pagination = ({paginaAtual, totalPages }) => {
                     <li>
                        <button className={paginaAtual === totalPages ? 
                                                           "page-link disabled btn btn-sm" 
-                                                          :"page-link btn btn-sm"}>
+                                                          :"page-link btn btn-sm"}
+                                onClick={(e)=>onChangePage((currentPage+1),e)}>
                         <i className="fa fa-angle-double-right"></i>
                        </button>
                     </li>
                     <li>
                        <button className={paginaAtual === totalPages ? 
-                                                          "page-link disabled btn btn-sm" 
-                                                          :"page-link btn btn-sm"}>
+                                     "page-link disabled btn btn-sm" 
+                                     :"page-link btn btn-sm"}
+                                     onClick={(e)=>onChangePage((totalPages),e)} >
+                                            
                         <i className="fa fa-angle-right"></i>
                        </button>
                     </li>

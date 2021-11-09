@@ -4,7 +4,6 @@ import { AppTitulo } from './Styles';
 
 
 const PageHeaders = ({ tituloPagina, path, tituloPesquisa, icon, toReturn }) => {
-    console.log(tituloPesquisa)
     return (
         <Fragment>
             <AppTitulo>
