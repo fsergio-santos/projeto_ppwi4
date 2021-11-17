@@ -1,22 +1,19 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from "react-router-dom";
 import { GradeSistema, Rodape } from '../../Components/Content/Style'
 import PageHeaders from '../../Components/Header/PageHeaders'
+import MensagemErro from '../../Components/Mensagem/MensagemErro';
 import { createAutor } from '../../Service/AutorService';
-import { INIT_AUTOR } from './Autor';
+import { INIT_AUTOR, validateAutor } from './Autor';
+import { useFormAutor } from './useFormAutor';
 
 const Inserir = () => {
-    
-    const [autor, setAutor] = useState(INIT_AUTOR);
-    const onChangeAutor = ( e ) => {
-       const { name, value } = e.target;
-       setAutor({ ...autor, [name]:value})
-    }
-
-    const onAutorSubmit= (e) =>{
-      e.preventDefault();
-      createAutor(autor);
-      setAutor(INIT_AUTOR)
+    const { onChangeAutor, onAutorSubmit, submitting, autor, errors } = useFormAutor(validateAutor, INIT_AUTOR ); 
+    const onAutorSubmitForm = (e) =>{
+      onAutorSubmit(e);
+      if ( submitting === true ){
+           //createAutor(autor);
+      }     
     }
 
     return (
@@ -32,7 +29,7 @@ const Inserir = () => {
           /> 
           <GradeSistema>
             <div className="row col-8 mx-auto">
-               <form onSubmit={(e) => onAutorSubmit(e)}>
+               <form onSubmit={(e) => onAutorSubmitForm(e)}>
                  <div className="row">
                      <div className="col-xs-12 col-sm-12 col-md-8">
                        <div className="form-group">
@@ -42,7 +39,12 @@ const Inserir = () => {
                                 id="nome"
                                 value={autor.nome}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.nome_valid === true 
+                                            ? "form-control is-invalid" 
+                                            : "form-control" }/>
+                         <MensagemErro 
+                                error={errors.nome_valid} 
+                                mensagem={errors.nome_mensagem} />                              
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-4">
@@ -53,7 +55,12 @@ const Inserir = () => {
                                 id="dataNascimento"
                                 value={autor.dataNascimento}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.dataNascimento_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                          <MensagemErro 
+                                error={errors.dataNascimento_valid} 
+                                mensagem={errors.dataNascimento_mensagem} />                    
                        </div>  
                      </div>
                  </div>
@@ -66,7 +73,12 @@ const Inserir = () => {
                                 id="rg"   
                                 value={autor.rg}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.rg_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/> 
+                           <MensagemErro 
+                                error={errors.rg_valid} 
+                                mensagem={errors.rg_mensagem} />                      
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-4">
@@ -77,7 +89,13 @@ const Inserir = () => {
                                 id="cpf"
                                 value={autor.cpf}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.cpf_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/> 
+
+                           <MensagemErro 
+                                error={errors.cpf_valid} 
+                                mensagem={errors.cpf_mensagem} />                                
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-4">
@@ -88,7 +106,12 @@ const Inserir = () => {
                                 id="sexo"
                                 value={autor.sexo}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.sexo_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.sexo_valid} 
+                                mensagem={errors.sexo_mensagem} />                       
                        </div>  
                      </div>
                  </div>
@@ -101,7 +124,12 @@ const Inserir = () => {
                                 id="endereco"
                                 value={autor.endereco}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.endereco_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.endereco_valid} 
+                                mensagem={errors.endereco_mensagem} />                                 
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-4">
@@ -112,7 +140,12 @@ const Inserir = () => {
                                 id="bairro" 
                                 value={autor.bairro}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.bairro_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.bairro_valid} 
+                                mensagem={errors.bairro_mensagem} />                                 
                        </div>  
                      </div>
                  </div>
@@ -125,7 +158,12 @@ const Inserir = () => {
                                 id="cidade"
                                 value={autor.cidade}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.cidade_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/> 
+                          <MensagemErro 
+                                error={errors.cidade_valid} 
+                                mensagem={errors.cidade_mensagem} />                                 
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-4">
@@ -136,7 +174,12 @@ const Inserir = () => {
                                 id="cep"
                                 value={autor.cep}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.cep_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/> 
+                           <MensagemErro 
+                                error={errors.cep_valid} 
+                                mensagem={errors.cep_mensagem} />                               
                        </div>  
                      </div>
                  </div>
@@ -149,7 +192,12 @@ const Inserir = () => {
                                 id="email"
                                 value={autor.email}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.email_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.email_valid} 
+                                mensagem={errors.email_mensagem} />                                  
                        </div>  
                      </div>
                  </div>
@@ -162,7 +210,12 @@ const Inserir = () => {
                                 id="telefoneFixo"
                                 value={autor.telefoneFixo}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.telefoneFixo_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.telefoneFixo_valid} 
+                                mensagem={errors.telefoneFixo_mensagem} />                                
                        </div>  
                      </div>
                      <div className="col-xs-12 col-sm-12 col-md-6">
@@ -173,7 +226,12 @@ const Inserir = () => {
                                 id="telefoneMovel"
                                 value={autor.telefoneMovel}
                                 onChange={(e) => onChangeAutor(e)}
-                                className="form-control"/>                       
+                                className={ errors.telefoneMovel_valid === true 
+                                  ? "form-control is-invalid" 
+                                  : "form-control" }/>
+                           <MensagemErro 
+                                error={errors.telefoneMovel_valid} 
+                                mensagem={errors.telefoneMovel_mensagem} />                                 
                        </div>  
                      </div>
                  </div>
