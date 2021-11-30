@@ -1,19 +1,59 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from "react-router-dom";
 import { GradeSistema, Rodape } from '../../Components/Content/Style'
 import PageHeaders from '../../Components/Header/PageHeaders'
 import MensagemErro from '../../Components/Mensagem/MensagemErro';
 import { createAutor } from '../../Service/AutorService';
-import { INIT_AUTOR, validateAutor } from './Autor';
+import { INIT_AUTOR, validateAutorFromServer } from './Autor';
+import ShowLivros from './ShowLivros';
 import { useFormAutor } from './useFormAutor';
 
 const Inserir = () => {
-    const { onChangeAutor, onAutorSubmit, submitting, autor, errors } = useFormAutor(validateAutor, INIT_AUTOR ); 
-    const onAutorSubmitForm = (e) =>{
+  const { onChangeAutor, onAutorSubmit, onClearAutor, submitting, autor, errorClient } = useFormAutor(INIT_AUTOR); 
+  const [errors, setErrors] = useState({});
+  const [showLivros, setShowLivros ] = useState(false); 
+  const onAutorSubmitForm = (e) => {
       onAutorSubmit(e);
-      if ( submitting === true ){
-           //createAutor(autor);
-      }     
+      if ( submitting ){
+         salvarAutor();  
+         onClearAutor(); 
+      } else {
+         setErrors(errorClient);
+      } 
+         
+    }
+
+
+    async function salvarAutor(){
+      const data = await createAutor(autor); 
+      console.log(data.data); 
+      if (data.data.status === 400 ){
+          setErrors(validateAutorFromServer(data.data.fields));
+      }    
+    }
+
+    const adicionarLivros = (e) => {
+        setShowLivros(true)
+    }
+
+    const onShowModal = () => {
+      setShowLivros(false)
+    }
+
+
+    const onChangeLivros = (e) => {
+      const { value } = e.target; 
+      let index = 0;
+      for ( let i = 0; i < autor.listaAutoresLivros; i++){
+         if ( autor.listaAutoresLivros[i].id == value ){
+              autor.listaAutoresLivros.splice(i,1)
+              index = 1;
+         }
+      }
+      if ( index !== 1 ){
+        autor.listaAutoresLivros.push({id:value})
+      }
+
     }
 
     return (
@@ -235,6 +275,18 @@ const Inserir = () => {
                        </div>  
                      </div>
                  </div>
+                 <div className="row">
+                     <div className="col-xs-12 col-sm-12 col-md-6">
+                       <div className="form-group">
+                         <label className="form-label">Livros:</label>
+                         <input type="button"
+                                id="livro"
+                                value="Cadastrar Livros do Autor"
+                                onClick={(e) => adicionarLivros(e)}
+                                className="form-control" />
+                       </div>  
+                     </div>
+                 </div>    
                  <input type='hidden' id='id' name='id' value={autor.id}/>
                  <Rodape>
                    <button type="submit"
@@ -251,6 +303,17 @@ const Inserir = () => {
                </form>
             </div> 
           </GradeSistema>
+          { 
+            showLivros ? (
+              <ShowLivros showModal={showLivros}
+                          dadosLivrosCadastrados={autor.listaAutoresLivros}
+                          onShowModal={onShowModal}
+                          onChangeChecked={onChangeLivros}
+                          operacao={false}/>
+            ): null 
+          }
+
+
         </div>
       </div>
     </Fragment>    
