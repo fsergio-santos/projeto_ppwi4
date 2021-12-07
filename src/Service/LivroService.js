@@ -21,7 +21,7 @@ export const findAllLivros = async ( paginaAtual, tamanhoPagina, atributo, dir )
 }
 
 
-export const findAutorByName = async ( nome, paginaAtual, tamanhoPagina, atributo, dir ) => {
+export const findLivroByName = async ( nome, paginaAtual, tamanhoPagina, atributo, dir ) => {
     return (
         banco({
             method:'GET',

@@ -12,7 +12,7 @@ export const INIT_AUTOR = {
   email: "",
   telefoneFixo: "",
   telefoneMovel: "",
-  listaAutoresLivros:[],
+  livros:[],
 };
 
 let errors = {

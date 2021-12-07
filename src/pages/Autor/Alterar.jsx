@@ -4,11 +4,13 @@ import { GradeSistema, Rodape } from '../../Components/Content/Style'
 import PageHeaders from '../../Components/Header/PageHeaders'
 import { INIT_AUTOR } from './Autor';
 import { findAutorById, updateAutor } from "../../Service/AutorService";
+import ShowLivros from './ShowLivros';
 
 const Alterar = (props) => {
   
   const { id } = props.match.params;
   const [autor, setAutor] = useState(INIT_AUTOR);
+  const [showLivros, setShowLivros ] = useState(false);
 
   useEffect(()=>{
     async function loadData() {
@@ -30,6 +32,34 @@ const Alterar = (props) => {
     setAutor(INIT_AUTOR)
   }
   
+
+  const adicionarLivros = (e) => {
+    setShowLivros(true)
+  }
+
+  const onShowModal = () => {
+    setShowLivros(false)
+  }
+
+
+  const onChangeLivros = (e) => {
+
+    const { value } = e.target; 
+
+    console.log(value);
+
+    let index = 0;
+    for ( let i = 0; i < autor.livros; i++){
+       if ( autor.livros[i].id == value ){
+            autor.livros.splice(i,1)
+            index = 1;
+       }
+    }
+    if ( index !== 1 ){
+      autor.livros.push({id:value})
+    }
+
+  }
 
     return (
         <Fragment>  
@@ -177,6 +207,18 @@ const Alterar = (props) => {
                        </div>  
                      </div>
                  </div>
+                 <div className="row">
+                     <div className="col-xs-12 col-sm-12 col-md-6">
+                       <div className="form-group">
+                         <label className="form-label">Livros:</label>
+                         <input type="button"
+                                id="livro"
+                                value="Cadastrar Livros do Autor"
+                                onClick={(e) => adicionarLivros(e)}
+                                className="form-control" />
+                       </div>  
+                     </div>
+                 </div>    
                  <input type='hidden' id='id' name='id' value={autor.id}/>
                  <Rodape>
                    <button type="submit"
@@ -193,6 +235,15 @@ const Alterar = (props) => {
                </form>
             </div> 
           </GradeSistema>
+          { 
+            showLivros ? (
+              <ShowLivros showModal={showLivros}
+                          dadosLivrosCadastrados={autor.livros}
+                          onShowModal={onShowModal}
+                          onChangeChecked={onChangeLivros}
+                          operacao={false}/>
+            ): null 
+          }
         </div>
       </div>
     </Fragment>    

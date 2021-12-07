@@ -42,16 +42,20 @@ const Inserir = () => {
 
 
     const onChangeLivros = (e) => {
+
       const { value } = e.target; 
+
+      console.log(value);
+
       let index = 0;
-      for ( let i = 0; i < autor.listaAutoresLivros; i++){
-         if ( autor.listaAutoresLivros[i].id == value ){
-              autor.listaAutoresLivros.splice(i,1)
+      for ( let i = 0; i < autor.livros; i++){
+         if ( autor.livros[i].id == value ){
+              autor.livros.splice(i,1)
               index = 1;
          }
       }
       if ( index !== 1 ){
-        autor.listaAutoresLivros.push({id:value})
+        autor.livros.push({id:value})
       }
 
     }
@@ -306,7 +310,7 @@ const Inserir = () => {
           { 
             showLivros ? (
               <ShowLivros showModal={showLivros}
-                          dadosLivrosCadastrados={autor.listaAutoresLivros}
+                          dadosLivrosCadastrados={autor.livros}
                           onShowModal={onShowModal}
                           onChangeChecked={onChangeLivros}
                           operacao={false}/>

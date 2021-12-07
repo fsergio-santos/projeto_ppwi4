@@ -4,11 +4,14 @@ import { GradeSistema, Rodape } from '../../Components/Content/Style'
 import PageHeaders from '../../Components/Header/PageHeaders'
 import { INIT_AUTOR } from './Autor';
 import { findAutorById } from "../../Service/AutorService";
+import ShowLivrosCadastrados from "./ShowLivrosCadastrados";
+
 
 const Consultar = (props) => {
 
   const { id } = props.match.params;
   const [autor, setAutor] = useState(INIT_AUTOR);
+  const [showLivros, setShowLivros ] = useState(false); 
 
   useEffect(()=>{
     async function loadData() {
@@ -19,6 +22,13 @@ const Consultar = (props) => {
     loadData(); 
   },[id])
 
+  const onShowModal = () => {
+    setShowLivros(false)
+  }
+
+  const adicionarLivros = (e) => {
+    setShowLivros(true)
+  }
 
     return (
         <Fragment>  
@@ -154,6 +164,18 @@ const Consultar = (props) => {
                        </div>  
                      </div>
                  </div>
+                 <div className="row">
+                     <div className="col-xs-12 col-sm-12 col-md-6">
+                       <div className="form-group">
+                         <label className="form-label">Livros:</label>
+                         <input type="button"
+                                id="livro"
+                                value="Cadastrar Livros do Autor"
+                                onClick={(e) => adicionarLivros(e)}
+                                className="form-control" />
+                       </div>  
+                     </div>
+                 </div> 
                  <input type='hidden' id='id' name='id' value={autor.id}/>
                  <Rodape>
                    <Link to="/autor/listar"
@@ -165,6 +187,14 @@ const Consultar = (props) => {
                </form>
             </div> 
           </GradeSistema>
+          { 
+            showLivros ? (
+              <ShowLivrosCadastrados showModal={showLivros}
+                          dadosLivrosCadastrados={autor.livros}
+                          onShowModal={onShowModal}
+                          />
+            ): null 
+          }
         </div>
       </div>
     </Fragment>    
